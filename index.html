@@ -5,106 +5,189 @@
 <title>عدد و نود</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css">
-
 <style>
 :root{
-  --bg:#0f172a;
-  --card:#111827;
-  --text:#f9fafb;
-  --accent:#22c55e;
-}
-.light{
   --bg:#f8fafc;
   --card:#ffffff;
   --text:#020617;
   --accent:#16a34a;
+  --logo-filter: invert(0%);
 }
+body.dark{
+  --bg:#0f172a;
+  --card:#111827;
+  --text:#f9fafb;
+  --accent:#22c55e;
+  --logo-filter: invert(100%);
+}
+
 body{
   margin:0;
   font-family:'Vazir',tahoma;
   background:var(--bg);
   color:var(--text);
   transition:0.4s;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
 }
+
 .flow-bg{
   position:fixed;
   inset:0;
   background:
-  linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px),
-  linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px);
+  linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px),
+  linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px);
   background-size:60px 60px;
   z-index:-1;
 }
+
 header{
-  padding:20px;
+  padding:15px;
   display:flex;
   justify-content:space-between;
   align-items:center;
+  position:relative;
 }
-h1{color:var(--accent)}
+h1{color:var(--accent); font-size:22px;}
+header img#siteLogo{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  height:100px;
+  filter: var(--logo-filter);
+}
+
 button{
   background:var(--accent);
   border:none;
-  padding:10px 18px;
+  padding:8px 14px;
   border-radius:10px;
   cursor:pointer;
   color:white;
+  font-size:14px;
 }
+
 .card{
   background:var(--card);
-  max-width:900px;
-  margin:40px auto;
-  padding:25px;
+  max-width:95%;
+  margin:15px auto;
+  padding:20px;
   border-radius:18px;
+  box-sizing:border-box;
 }
+
 input{
   padding:10px;
   width:100%;
   border-radius:8px;
-  border:none;
+  border:1px solid #ccc;
   margin-top:10px;
+  box-sizing:border-box;
 }
+
 .hidden{display:none}
+
 .profile{
   display:flex;
   align-items:center;
   gap:15px;
+  flex-wrap:wrap;
 }
 .profile img{
-  width:60px;
-  height:60px;
+  width:70px;
+  height:70px;
   border-radius:50%;
   object-fit:cover;
-  border:2px solid var(--accent);
+  border:3px solid var(--accent);
 }
+
 .project{
   border:2px dashed var(--accent);
-  padding:20px;
+  padding:15px;
   border-radius:16px;
   cursor:pointer;
   margin-top:15px;
 }
+
 pre{
   background:#000;
   color:#00ff88;
-  padding:15px;
+  padding:12px;
   border-radius:12px;
   font-size:14px;
+  max-height:300px;
+  overflow:auto;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+
+.modal-content{
+  background:var(--card);
+  padding:15px;
+  border-radius:12px;
+  max-width:95%;
+  width:90%;
+  text-align:center;
+  position:relative;
+}
+
+.modal-content img{
+  max-width:100%;
+  border-radius:12px;
+}
+
+.close-btn{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:var(--accent);
+  color:white;
+  border:none;
+  border-radius:50%;
+  width:28px;
+  height:28px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+footer{
+  text-align:center;
+  padding:12px 0;
+  font-size:15px;
+  opacity:0.7;
+  margin-top:auto;
+}
+
+/* ریسپانسیو موبایل */
+@media (max-width:600px){
+  header img#siteLogo{ height:80px; }
+  .profile img{ width:60px; height:60px; }
+  h1{ font-size:18px; }
+  button{ padding:6px 12px; font-size:13px; }
 }
 </style>
 </head>
-
 <body>
 <div class="flow-bg"></div>
 
 <header>
   <h1>عدد و نود</h1>
+  <img id="siteLogo" src="https://s6.uupload.ir/files/عدد_و_نود_آرم_3_skmi.png" alt="آرم سایت">
   <button onclick="toggleMode()">
-    <img id="modeIcon" src="https://s6.uupload.ir/files/42_q501.png" width="25" height="25">
+    <img id="modeIcon" src="https://s6.uupload.ir/files/42_q501.png" width="28" height="28">
   </button>
 </header>
 
-<!-- ورود کاربر -->
 <div class="card" id="userLogin">
   <h2>ورود کاربر</h2>
   <input id="username" placeholder="نام کاربر">
@@ -115,7 +198,6 @@ pre{
   <button onclick="showAdmin()">ورود مدیر</button>
 </div>
 
-<!-- ورود مدیر -->
 <div class="card hidden" id="adminLogin">
   <h2>ورود مدیر</h2>
   <input type="password" id="adminCode" placeholder="کد مدیر">
@@ -123,163 +205,114 @@ pre{
   <button onclick="loginAdmin()">ورود</button>
 </div>
 
-<!-- صفحه پروژه ها -->
 <div class="card hidden" id="projects">
   <h2>پروژه ها</h2>
-
   <div class="project" onclick="selectProject('divisor')">
     <h3>تشخیص مقسوم علیه ها</h3>
     <p>پروژه ریاضی</p>
   </div>
-
 </div>
 
-<!-- پنل پروژه -->
 <div class="card hidden" id="panel">
   <div class="profile">
     <img id="profilePic">
     <div>
       <strong id="profileName"></strong>
-      <div style="opacity:.7">خوش آمدید 👋</div>
-      <button onclick="editProfile()">ویرایش پروفایل ✏️</button>
+      <button onclick="editProfile()">ویرایش پروفایل</button>
     </div>
   </div>
-
   <hr><br>
-
-  <button onclick="runFlow()">▶ اجرای برنامه</button>
-  <button onclick="backToProjects()">⬅ بازگشت به پروژه ها</button>
-
+  <button onclick="runFlow()">اجرای برنامه</button>
+  <button onclick="backToProjects()">بازگشت به پروژه ها</button>
+  <button onclick="showAlgorithm()">نشان دادن الگوریتم</button>
+  <button onclick="exportResult()">تبدیل جواب به عکس</button>
   <br><br>
-
   <a href="مشخص کننده مقسوم علیه ها.fprg" download>
-    <button>⬇ دانلود فایل فلوگوریتم</button>
+    <button>دانلود فایل فلوگوریتم</button>
   </a>
-
   <pre id="result"></pre>
 </div>
 
+<div class="modal" id="algoModal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeAlgorithm()">×</button>
+    <img src="https://s6.uupload.ir/files/2025-12-24_14-15-43_h059.png" alt="الگوریتم">
+  </div>
+</div>
+
+<footer>کاری از گروه عدد و نود</footer>
+
 <script>
 function toggleMode(){
-  document.body.classList.toggle("light")
-  let img=document.getElementById("modeIcon")
-  if(document.body.classList.contains("light")){
-    img.src="https://s6.uupload.ir/files/43_y27b.png" // حالت روز
+  document.body.classList.toggle("dark");
+  let img=document.getElementById("modeIcon");
+  let logo=document.getElementById("siteLogo");
+  if(document.body.classList.contains("dark")){
+    img.src="https://s6.uupload.ir/files/43_y27b.png";
+    logo.style.filter="invert(100%)";
   }else{
-    img.src="https://s6.uupload.ir/files/42_q501.png" // حالت شب
+    img.src="https://s6.uupload.ir/files/42_q501.png";
+    logo.style.filter="invert(0%)";
   }
 }
 
-function showAdmin(){
-  userLogin.classList.add("hidden")
-  adminLogin.classList.remove("hidden")
-}
-
-function loginAdmin(){
-  if(adminCode.value==="adad132"){
-    openProjects("مدیر","https://cdn-icons-png.flaticon.com/512/847/847969.png")
-  }else{
-    alert("کد اشتباهه 😅")
-  }
-}
-
-function loginUser(){
-  let name=username.value
-  let file=avatar.files[0]
-  if(!name||!file){
-    alert("نام و عکس یادت رفت 😐")
-    return
-  }
-  let reader=new FileReader()
-  reader.onload=()=>{
-    localStorage.setItem("name",name)
-    localStorage.setItem("avatar",reader.result)
-    openProjects(name,reader.result)
-  }
-  reader.readAsDataURL(file)
-}
-
-function openProjects(name,img){
-  userLogin.classList.add("hidden")
-  adminLogin.classList.add("hidden")
-  projects.classList.remove("hidden")
-  profileName.innerText=name
-  profilePic.src=img
-}
-
-function selectProject(p){
-  localStorage.setItem("project",p)
-  projects.classList.add("hidden")
-  panel.classList.remove("hidden")
-}
-
-function backToProjects(){
-  panel.classList.add("hidden")
-  projects.classList.remove("hidden")
-}
+function showAdmin(){ userLogin.classList.add("hidden"); adminLogin.classList.remove("hidden"); }
+function loginAdmin(){ if(adminCode.value==="adad132"){ openProjects("مدیر","https://cdn-icons-png.flaticon.com/512/847/847969.png"); }else{ alert("کد اشتباه"); } }
+function loginUser(){ let name=username.value, file=avatar.files[0]; if(!name||!file){ alert("نام و عکس یادت رفت"); return; } let reader=new FileReader(); reader.onload=()=>{ localStorage.setItem("name",name); localStorage.setItem("avatar",reader.result); openProjects(name,reader.result); }; reader.readAsDataURL(file); }
+function openProjects(name,img){ userLogin.classList.add("hidden"); adminLogin.classList.add("hidden"); projects.classList.remove("hidden"); profileName.innerText=name; profilePic.src=img; }
+function selectProject(p){ localStorage.setItem("project",p); projects.classList.add("hidden"); panel.classList.remove("hidden"); }
+function backToProjects(){ panel.classList.add("hidden"); projects.classList.remove("hidden"); }
 
 function runFlow(){
-  let output=""
-  output+="این برنامه مقسوم علیه های یک عدد را محاسبه میکند\n"
-  output+="سلام\n"
-  output+="به برنامه تشخیص مقسوم علیه ها خوش آمدید\n"
-  output+="برای شروع چه عددی را در نظر دارید؟\n\n"
-
-  let a=parseInt(prompt("عدد را وارد کنید"))
-  if(isNaN(a)) return
-
-  if(a<0){
-    output+="متاسفانه نمیتوانم مقسوم علیه های اعداد منفی را حساب کنم"
-  }else{
-    for(let c=1;c<=a;c++){
-      if(a%c===0){
-        output+="بر "+c+" بخش پذیر است\n"
-      }
-    }
-  }
-  result.innerText=output
+  let output="این برنامه مقسوم علیه های یک عدد را محاسبه میکند\nبرای شروع چه عددی را در نظر دارید؟\n\n";
+  let a=parseInt(prompt("عدد را وارد کنید"));
+  if(isNaN(a)) return;
+  if(a<0){ output+="نمیتوانم مقسوم علیه های اعداد منفی را حساب کنم"; }
+  else{ for(let c=1;c<=a;c++){ if(a%c===0) output+="بر "+c+" بخش پذیر است\n"; } }
+  result.innerText=output;
+  localStorage.setItem("lastNumber", a);
 }
 
-/* ویرایش پروفایل */
 function editProfile(){
-  let newName=prompt("نام جدید را وارد کنید",profileName.innerText)
-  if(newName) profileName.innerText=newName
-
-  let file=input=document.createElement("input")
-  file.type="file"
-  file.accept="image/*"
-  file.onchange=e=>{
-    let f=e.target.files[0]
-    if(f){
-      let reader=new FileReader()
-      reader.onload=()=>{
-        profilePic.src=reader.result
-        localStorage.setItem("avatar",reader.result)
-      }
-      reader.readAsDataURL(f)
-    }
-  }
-  file.click()
-  localStorage.setItem("name",profileName.innerText)
+  let newName=prompt("نام جدید را وارد کنید",profileName.innerText);
+  if(newName) profileName.innerText=newName;
+  let file=input=document.createElement("input"); file.type="file"; file.accept="image/*";
+  file.onchange=e=>{ let f=e.target.files[0]; if(f){ let reader=new FileReader(); reader.onload=()=>{ profilePic.src=reader.result; localStorage.setItem("avatar",reader.result); }; reader.readAsDataURL(f); } };
+  file.click();
+  localStorage.setItem("name",profileName.innerText);
 }
 
-/* بازیابی ذخیره */
-window.onload=()=>{
+function showAlgorithm(){ document.getElementById("algoModal").style.display="flex"; }
+function closeAlgorithm(){ document.getElementById("algoModal").style.display="none"; }
 
-  let n=localStorage.getItem("name")
-  let a=localStorage.getItem("avatar")
-  let p=localStorage.getItem("project")
+function exportResult(){
+  if(!profileName.innerText||!result.innerText){ alert("ابتدا پروفایل و جواب برنامه را داشته باشید"); return; }
+  let canvas=document.createElement("canvas"); canvas.width=800; canvas.height=1200;
+  let ctx=canvas.getContext("2d");
+  ctx.fillStyle=document.body.classList.contains("dark")?"#111827":"#f8fafc"; ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  if(n&&a){
-    profileName.innerText=n
-    profilePic.src=a
-    userLogin.classList.add("hidden")
-    if(p){
-      panel.classList.remove("hidden")
-    }else{
-      projects.classList.remove("hidden")
+  let img=new Image(); img.crossOrigin="anonymous"; img.src=profilePic.src;
+  let logo=new Image(); logo.crossOrigin="anonymous"; logo.src="https://s6.uupload.ir/files/عدد_و_نود_آرم_3_skmi.png";
+
+  img.onload=()=>{
+    ctx.save(); ctx.beginPath(); ctx.arc(100,100,60,0,2*Math.PI); ctx.closePath(); ctx.clip(); ctx.drawImage(img,50,50,120,120); ctx.restore();
+    ctx.fillStyle=document.body.classList.contains("dark")?"#f9fafb":"#020617"; ctx.font="bold 28px Vazir"; ctx.fillText(profileName.innerText, 200, 110);
+
+    let projectName=localStorage.getItem("project")||"نام پروژه"; ctx.font="bold 32px Vazir"; ctx.textAlign="center"; ctx.fillText(projectName, canvas.width/2, 220);
+
+    ctx.font="22px Vazir"; ctx.textAlign="right"; let lastNumber=localStorage.getItem("lastNumber")||""; let lines=["عدد: "+lastNumber].concat(result.innerText.split("\n")); let y=250; for(let line of lines){ ctx.fillText(line, canvas.width-20, y); y+=32; }
+
+    logo.onload=()=>{
+      ctx.drawImage(logo, canvas.width/2-120, canvas.height-180,240,120);
+      ctx.textAlign="center"; ctx.font="20px Vazir"; ctx.fillText("ساخته شده توسط سایت عدد و نود", canvas.width/2, canvas.height-40);
+      let link=document.createElement("a"); link.download="result.png"; link.href=canvas.toDataURL("image/png"); link.click();
     }
   }
+}
+
+window.onload=()=>{
+  let n=localStorage.getItem("name"), a=localStorage.getItem("avatar"), p=localStorage.getItem("project");
+  if(n&&a){ profileName.innerText=n; profilePic.src=a; userLogin.classList.add("hidden"); if(p) panel.classList.remove("hidden"); else projects.classList.remove("hidden"); }
 }
 </script>
 </body>
