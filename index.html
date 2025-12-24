@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>عدد و نود</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --bg:#0f172a;
+  --card:#111827;
+  --text:#f9fafb;
+  --accent:#22c55e;
+}
+.light{
+  --bg:#f8fafc;
+  --card:#ffffff;
+  --text:#020617;
+  --accent:#16a34a;
+}
+body{
+  margin:0;
+  font-family:tahoma;
+  background:var(--bg);
+  color:var(--text);
+  transition:0.4s;
+}
+.flow-bg{
+  position:fixed;
+  inset:0;
+  background:
+  linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px),
+  linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px);
+  background-size:60px 60px;
+  z-index:-1;
+}
+header{
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+h1{color:var(--accent)}
+button{
+  background:var(--accent);
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;
+  color:white;
+}
+.card{
+  background:var(--card);
+  max-width:900px;
+  margin:40px auto;
+  padding:25px;
+  border-radius:18px;
+}
+input{
+  padding:10px;
+  width:100%;
+  border-radius:8px;
+  border:none;
+  margin-top:10px;
+}
+.hidden{display:none}
+.profile{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.profile img{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid var(--accent);
+}
+pre{
+  background:#000;
+  color:#00ff88;
+  padding:15px;
+  border-radius:12px;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+<div class="flow-bg"></div>
+
+<header>
+  <h1>عدد و نود</h1>
+  <button onclick="toggleMode()">☀️🌙</button>
+</header>
+
+<!-- ورود کاربر -->
+<div class="card" id="userLogin">
+  <h2>ورود کاربر</h2>
+  <input id="username" placeholder="نام کاربر">
+  <input type="file" id="avatar" accept="image/*">
+  <br><br>
+  <button onclick="loginUser()">ورود</button>
+  <hr><br>
+  <button onclick="showAdmin()">ورود مدیر</button>
+</div>
+
+<!-- ورود مدیر -->
+<div class="card hidden" id="adminLogin">
+  <h2>ورود مدیر</h2>
+  <input type="password" id="adminCode" placeholder="کد مدیر">
+  <br><br>
+  <button onclick="loginAdmin()">ورود</button>
+</div>
+
+<!-- پنل -->
+<div class="card hidden" id="panel">
+  <div class="profile">
+    <img id="profilePic">
+    <div>
+      <strong id="profileName"></strong>
+      <div style="opacity:.7">خوش آمدید 👋</div>
+    </div>
+  </div>
+
+  <hr><br>
+
+  <button onclick="runFlow()">▶ اجرای برنامه</button>
+  <br><br>
+
+  <a href="مشخص کننده مقسوم علیه ها.fprg" download>
+    <button>⬇ دانلود فایل فلوگوریتم</button>
+  </a>
+
+  <br><br>
+  <button onclick="alert('پروژه های بیشتر در راه است 🚀')">
+    پروژه های بیشتر
+  </button>
+
+  <pre id="result"></pre>
+</div>
+
+<script>
+function toggleMode(){
+  document.body.classList.toggle("light")
+}
+
+function showAdmin(){
+  document.getElementById("userLogin").classList.add("hidden")
+  document.getElementById("adminLogin").classList.remove("hidden")
+}
+
+function loginAdmin(){
+  if(document.getElementById("adminCode").value==="adad132"){
+    openPanel("مدیر","https://cdn-icons-png.flaticon.com/512/847/847969.png")
+  }else{
+    alert("کد اشتباهه 😅")
+  }
+}
+
+function loginUser(){
+  let name=document.getElementById("username").value
+  let file=document.getElementById("avatar").files[0]
+  if(!name||!file){
+    alert("نام و عکس یادت رفت 😐")
+    return
+  }
+  let reader=new FileReader()
+  reader.onload=()=>openPanel(name,reader.result)
+  reader.readAsDataURL(file)
+}
+
+function openPanel(name,img){
+  document.getElementById("userLogin").classList.add("hidden")
+  document.getElementById("adminLogin").classList.add("hidden")
+  document.getElementById("panel").classList.remove("hidden")
+  document.getElementById("profileName").innerText=name
+  document.getElementById("profilePic").src=img
+}
+
+function runFlow(){
+  let output=""
+  output+="سلام\n"
+  output+="به برنامه تشخیص مقسوم علیه ها خوش آمدید\n"
+  output+="برای شروع چه عددی را در نظر دارید؟\n\n"
+
+  let a=parseInt(prompt("عدد را وارد کنید"))
+  if(isNaN(a)) return
+
+  if(a<0){
+    output+="متاسفانه نمیتوانم مقسوم علیه های اعداد منفی را حساب کنم"
+  }else{
+    for(let c=1;c<=a;c++){
+      if(a%c===0){
+        output+="بر "+c+" بخش پذیر است\n"
+      }
+    }
+  }
+  document.getElementById("result").innerText=output
+}
+</script>
+</body>
+</html>
