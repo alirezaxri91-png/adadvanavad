@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>عدد و نود</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css">
 
 <style>
 :root{
@@ -20,7 +21,7 @@
 }
 body{
   margin:0;
-  font-family:tahoma;
+  font-family:'Vazir',tahoma;
   background:var(--bg);
   color:var(--text);
   transition:0.4s;
@@ -98,7 +99,9 @@ pre{
 
 <header>
   <h1>عدد و نود</h1>
-  <button onclick="toggleMode()">☀️🌙</button>
+  <button onclick="toggleMode()">
+    <img id="modeIcon" src="https://s6.uupload.ir/files/42_q501.png" width="25" height="25">
+  </button>
 </header>
 
 <!-- ورود کاربر -->
@@ -138,6 +141,7 @@ pre{
     <div>
       <strong id="profileName"></strong>
       <div style="opacity:.7">خوش آمدید 👋</div>
+      <button onclick="editProfile()">ویرایش پروفایل ✏️</button>
     </div>
   </div>
 
@@ -158,6 +162,12 @@ pre{
 <script>
 function toggleMode(){
   document.body.classList.toggle("light")
+  let img=document.getElementById("modeIcon")
+  if(document.body.classList.contains("light")){
+    img.src="https://s6.uupload.ir/files/43_y27b.png" // حالت روز
+  }else{
+    img.src="https://s6.uupload.ir/files/42_q501.png" // حالت شب
+  }
 }
 
 function showAdmin(){
@@ -230,8 +240,32 @@ function runFlow(){
   result.innerText=output
 }
 
+/* ویرایش پروفایل */
+function editProfile(){
+  let newName=prompt("نام جدید را وارد کنید",profileName.innerText)
+  if(newName) profileName.innerText=newName
+
+  let file=input=document.createElement("input")
+  file.type="file"
+  file.accept="image/*"
+  file.onchange=e=>{
+    let f=e.target.files[0]
+    if(f){
+      let reader=new FileReader()
+      reader.onload=()=>{
+        profilePic.src=reader.result
+        localStorage.setItem("avatar",reader.result)
+      }
+      reader.readAsDataURL(f)
+    }
+  }
+  file.click()
+  localStorage.setItem("name",profileName.innerText)
+}
+
 /* بازیابی ذخیره */
 window.onload=()=>{
+
   let n=localStorage.getItem("name")
   let a=localStorage.getItem("avatar")
   let p=localStorage.getItem("project")
