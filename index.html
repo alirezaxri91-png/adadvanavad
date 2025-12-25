@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>عدد و نود</title>
-  <link rel="icon" type="image/png" href="assets/img/عدد44.png">
-  
+<link rel="icon" type="image/png" href="assets/img/عدد44.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css">
 <style>
@@ -22,7 +21,6 @@ body.dark{
   --accent:#22c55e;
   --logo-filter: invert(100%);
 }
-
 body{
   margin:0;
   font-family:'Vazir',tahoma;
@@ -33,7 +31,6 @@ body{
   display:flex;
   flex-direction:column;
 }
-
 .flow-bg{
   position:fixed;
   inset:0;
@@ -43,7 +40,6 @@ body{
   background-size:60px 60px;
   z-index:-1;
 }
-
 header{
   padding:15px;
   display:flex;
@@ -60,7 +56,6 @@ header img#siteLogo{
   height:100px;
   filter: var(--logo-filter);
 }
-
 button{
   background:var(--accent);
   border:none;
@@ -70,7 +65,6 @@ button{
   color:white;
   font-size:14px;
 }
-
 .card{
   background:var(--card);
   max-width:95%;
@@ -79,7 +73,6 @@ button{
   border-radius:18px;
   box-sizing:border-box;
 }
-
 input{
   padding:10px;
   width:100%;
@@ -88,9 +81,7 @@ input{
   margin-top:10px;
   box-sizing:border-box;
 }
-
 .hidden{display:none}
-
 .profile{
   display:flex;
   align-items:center;
@@ -104,7 +95,6 @@ input{
   object-fit:cover;
   border:3px solid var(--accent);
 }
-
 .project{
   border:2px dashed var(--accent);
   padding:15px;
@@ -112,7 +102,6 @@ input{
   cursor:pointer;
   margin-top:15px;
 }
-
 pre{
   background:#000;
   color:#00ff88;
@@ -122,7 +111,6 @@ pre{
   max-height:300px;
   overflow:auto;
 }
-
 .modal{
   display:none;
   position:fixed;
@@ -132,7 +120,6 @@ pre{
   align-items:center;
   z-index:1000;
 }
-
 .modal-content{
   background:var(--card);
   padding:15px;
@@ -142,12 +129,10 @@ pre{
   text-align:center;
   position:relative;
 }
-
 .modal-content img{
   max-width:100%;
   border-radius:12px;
 }
-
 .close-btn{
   position:absolute;
   top:10px;
@@ -161,7 +146,6 @@ pre{
   cursor:pointer;
   font-weight:bold;
 }
-
 footer{
   text-align:center;
   padding:12px 0;
@@ -169,8 +153,6 @@ footer{
   opacity:0.7;
   margin-top:auto;
 }
-
-/* ریسپانسیو موبایل */
 @media (max-width:600px){
   header img#siteLogo{ height:80px; }
   .profile img{ width:60px; height:60px; }
@@ -181,7 +163,6 @@ footer{
 </head>
 <body>
 <div class="flow-bg"></div>
-
 <header>
   <h1>عدد و نود</h1>
   <img id="siteLogo" src="https://s6.uupload.ir/files/عدد_و_نود_آرم_3_skmi.png" alt="آرم سایت">
@@ -213,6 +194,10 @@ footer{
     <h3>تشخیص مقسوم علیه ها</h3>
     <p>پروژه ریاضی</p>
   </div>
+  <div class="project" onclick="selectProject('primeOrComposite')">
+    <h3>اعداد اول یا مرکب</h3>
+    <p>پروژه ریاضی</p>
+  </div>
 </div>
 
 <div class="card hidden" id="panel">
@@ -229,7 +214,7 @@ footer{
   <button onclick="showAlgorithm()">نشان دادن الگوریتم</button>
   <button onclick="exportResult()">تبدیل جواب به عکس</button>
   <br><br>
-  <a href="مشخص کننده مقسوم علیه ها.fprg" download>
+  <a id="downloadLink" href="" download>
     <button>دانلود فایل فلوگوریتم</button>
   </a>
   <pre id="result"></pre>
@@ -238,7 +223,7 @@ footer{
 <div class="modal" id="algoModal">
   <div class="modal-content">
     <button class="close-btn" onclick="closeAlgorithm()">×</button>
-    <img src="https://s6.uupload.ir/files/2025-12-24_14-15-43_h059.png" alt="الگوریتم">
+    <img id="algoImg" src="" alt="الگوریتم">
   </div>
 </div>
 
@@ -260,19 +245,71 @@ function toggleMode(){
 
 function showAdmin(){ userLogin.classList.add("hidden"); adminLogin.classList.remove("hidden"); }
 function loginAdmin(){ if(adminCode.value==="adad132"){ openProjects("مدیر","https://cdn-icons-png.flaticon.com/512/847/847969.png"); }else{ alert("کد اشتباه"); } }
-function loginUser(){ let name=username.value, file=avatar.files[0]; if(!name||!file){ alert("نام و عکس یادت رفت"); return; } let reader=new FileReader(); reader.onload=()=>{ localStorage.setItem("name",name); localStorage.setItem("avatar",reader.result); openProjects(name,reader.result); }; reader.readAsDataURL(file); }
-function openProjects(name,img){ userLogin.classList.add("hidden"); adminLogin.classList.add("hidden"); projects.classList.remove("hidden"); profileName.innerText=name; profilePic.src=img; }
-function selectProject(p){ localStorage.setItem("project",p); projects.classList.add("hidden"); panel.classList.remove("hidden"); }
+
+function loginUser(){ 
+  let name=username.value, file=avatar.files[0]; 
+  if(!name||!file){ alert("نام و عکس یادت رفت"); return; } 
+  let reader=new FileReader(); 
+  reader.onload=()=>{ localStorage.setItem("name",name); localStorage.setItem("avatar",reader.result); openProjects(name,reader.result); }; 
+  reader.readAsDataURL(file); 
+}
+
+function openProjects(name,img){ 
+  userLogin.classList.add("hidden"); 
+  adminLogin.classList.add("hidden"); 
+  projects.classList.remove("hidden"); 
+  profileName.innerText=name; 
+  profilePic.src=img; 
+}
+
+function selectProject(p){ 
+  localStorage.setItem("project",p); 
+  projects.classList.add("hidden"); 
+  panel.classList.remove("hidden"); 
+  let link=document.getElementById("downloadLink");
+  let algo=document.getElementById("algoImg");
+  if(p==="divisor"){ 
+    link.href="مشخص کننده مقسوم علیه ها.fprg";
+    algo.src="https://s6.uupload.ir/files/2025-12-24_14-15-43_h059.png";
+  }else if(p==="primeOrComposite"){
+    link.href="https://drive.usercontent.google.com/u/0/uc?id=1-IK4jqmvxccUmyPgIxNdlNEXYgS28KaT&export=download";
+    algo.src="https://s6.uupload.ir/files/2025-12-25_12-27-43_hwzy.png";
+  }
+}
+
 function backToProjects(){ panel.classList.add("hidden"); projects.classList.remove("hidden"); }
 
 function runFlow(){
-  let output="این برنامه مقسوم علیه های یک عدد را محاسبه میکند\nبرای شروع چه عددی را در نظر دارید؟\n\n";
-  let a=parseInt(prompt("عدد را وارد کنید"));
-  if(isNaN(a)) return;
-  if(a<0){ output+="نمیتوانم مقسوم علیه های اعداد منفی را حساب کنم"; }
-  else{ for(let c=1;c<=a;c++){ if(a%c===0) output+="بر "+c+" بخش پذیر است\n"; } }
-  result.innerText=output;
-  localStorage.setItem("lastNumber", a);
+  let project=localStorage.getItem("project");
+  if(project==="divisor"){
+    let output="این برنامه مقسوم علیه های یک عدد را محاسبه میکند\nبرای شروع چه عددی را در نظر دارید؟\n\n";
+    let a=parseInt(prompt("عدد را وارد کنید"));
+    if(isNaN(a)) return;
+    if(a<0){ output+="نمیتوانم مقسوم علیه های اعداد منفی را حساب کنم"; }
+    else{ for(let c=1;c<=a;c++){ if(a%c===0) output+="بر "+c+" بخش پذیر است\n"; } }
+    result.innerText=output;
+    localStorage.setItem("lastNumber", a);
+  }else if(project==="primeOrComposite"){
+    let output="سلام\nچه عددی هست که میخواهی اول یا مرکب بودنش را مشخص کنم؟\n";
+    let num=parseInt(prompt("عدد را وارد کنید:"));
+    if(num===1){ output+="عدد 1 نه اول است و نه مرکب"; result.innerText=output; return; }
+    let limit=Math.floor(Math.sqrt(num));
+    let x=0, z=0;
+    for(let i=2;i<=limit;i++){
+      let a=0;
+      for(let j=1;j<=i;j++){ if(i%j===0) a++; }
+      if(a===2){
+        if(num%i===0){
+          if(z!==0) output+=" و ";
+          else output+="عددتان بر اعداد اول ";
+          output+=i; x++; z++;
+        }
+      }
+    }
+    if(x===0){ output+="عددتان فقط بر عدد اول "+num+" بخش پذیر است\nپس عدد اول است"; }
+    else output+=" بخش پذیر است\nپس عدد مرکب است";
+    result.innerText=output;
+  }
 }
 
 function editProfile(){
@@ -299,11 +336,8 @@ function exportResult(){
   img.onload=()=>{
     ctx.save(); ctx.beginPath(); ctx.arc(100,100,60,0,2*Math.PI); ctx.closePath(); ctx.clip(); ctx.drawImage(img,50,50,120,120); ctx.restore();
     ctx.fillStyle=document.body.classList.contains("dark")?"#f9fafb":"#020617"; ctx.font="bold 28px Vazir"; ctx.fillText(profileName.innerText, 200, 110);
-
     let projectName=localStorage.getItem("project")||"نام پروژه"; ctx.font="bold 32px Vazir"; ctx.textAlign="center"; ctx.fillText(projectName, canvas.width/2, 220);
-
     ctx.font="22px Vazir"; ctx.textAlign="right"; let lastNumber=localStorage.getItem("lastNumber")||""; let lines=["عدد: "+lastNumber].concat(result.innerText.split("\n")); let y=250; for(let line of lines){ ctx.fillText(line, canvas.width-20, y); y+=32; }
-
     logo.onload=()=>{
       ctx.drawImage(logo, canvas.width/2-120, canvas.height-180,240,120);
       ctx.textAlign="center"; ctx.font="20px Vazir"; ctx.fillText("ساخته شده توسط سایت عدد و نود", canvas.width/2, canvas.height-40);
